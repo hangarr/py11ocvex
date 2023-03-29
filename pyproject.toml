@@ -1,0 +1,7 @@
+[build-system]
+requires=["pybind11 <2.9,>=2.8", "setuptools"]
+
+[tool.black]
+line-length = 80
+target-version = ['py38']
+
