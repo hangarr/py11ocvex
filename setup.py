@@ -71,6 +71,7 @@ setup(
     ext_modules=ext_modules,
     long_description=long_description,
     long_description_content_type="text/markdown",
+    packages=find_packages(),
     install_requires=[
         "numpy>=1.21,<1.22",
         "pillow>=9.1,<9.2",
@@ -78,5 +79,6 @@ setup(
         "scikit-video>=1.1.11,<1.2.0",
         "seaborn>=0.12.1,<0.13.0",
     ],
+    entry_points={},
 )
 

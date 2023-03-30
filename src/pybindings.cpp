@@ -263,7 +263,7 @@ py::list testcopylvPwrapper(py::list src) {
 }
 
 
-PYBIND11_MODULE(antineutron_cpp1_1, m) {
+PYBIND11_MODULE(py11ocvex, m) {
     m.doc() = R"pbdoc(
         Pybind11 example plugin
         -----------------------
