@@ -1,53 +1,22 @@
-# Building antineutron 1.1 (AN 1.1) C++
+# Example Python `pybind11`/OpenCV C/C++ Extension
 
 ## Introduction
-antineutron 1.0 (AN 1.0) uses `pybind11` to build the Python bindings for the C++ core. While this approached allows one to leave the C++ code alone, one does have to manually code a `pybindings.cpp` module that provides some idiosyncratic `pybind11` declarations and all translations between Python/C++ complex data types.  Modifying the C++ code often requires modifying the `pybindings.cpp`.
+OpenCV uses it's own idiosyncratic system for building the Python `cv2` version of OpenCV as a Python C/C++ extension.  Although it would make sense to use the same system for building Python C/C++ extensions that use OpenCV, it's hard to find good documentation how to do this.  `pybind11` has emerged as a popular tool for building Python C/C++ extensions there also doesn't seem to be a lot of documentation or examples for doing this that clearly deals with the key OpenCV and Python data structures in OpenCV C++ and Python `cv2`. This repo provides a simple Python C/C++ extension using OpenCV++ and `pybind11` built with `setuptools` and its version of Python's `setup.py` functionality.
 
-AN 1.1 uses a slightly modified version of the OpenCV tools for automatically building the Python bindings.  These tools only require that one annotate the core C++ `.hpp` files with just a few macros, all supporting code and information is in other external files in the repo. The macros should be transparent to other C++ build chains. The general approach and the macros are explained in the OpenCV doc [How OpenCV-Python Bindings Works? ](https://docs.opencv.org/4.5.5/da/d49/tutorial_py_bindings_basics.html), although not very clearly.
+## C++/OpenCV and Python/Numpy Data Structures
+OpenCV is a library for working with digital images in C++ embodied as modestly large (compared to big ML models anyway) 3-D `cv::Mat` data objects. Numpy is a Python package for working with modestly large `np.array` multidimensonal numeric matrices.  `cv:Mat`  and `np.array` objects both store data in a non-Pythonic, flexible C/C++ fashion and can be quite large.  Bindings such as `pybind11` and good programming practice strive to avoid copying this data in transfers between language domains.  Instead, transfers hand-off control of the memory and data it contains, including de-allocation when the data is no longer valid according to the rules of the language domain that has control of it when it becomes invalid.
 
-## OpenCV-Python Bindings
+Applications using OpenCV also commonly use small nested native `std:vector<T>` objects in C++ and native *List* `[]` objects in Python. Python `list` and C++ `std::vector<>` objects are Python `[]` are native complex data types with their own memory organization in the respective languages.  For that reason, the binding for one language to the other can only efficiently transfer a read-only accessor in the destination language to the data in the source language. Otherwise, when read/write access is required, the binding must copy the data from the source language item into a destination object with the destination language format.  
 
-Ultimately C++ extensions to Python must be packaged in a `mypackage.fullname.so` shared object library on *nix systems.  If this `mypackage.fullname.so` file is packaged in either a Python egg (old-style packaging) or Python wheel (new-style packaging), the bindings can be made available on a Python installation by:
-```
-pip install .
-```
-This executes the `setup.py` script in a suitably structured repo to build an install the extension which includes the `mypackage.fullname.so`.
+The `cv::Mat` objects used for images in OpenCV are 3-D matrices.  This usefully constrains the other three data objects and the code in this example.  Although `np.array` objects can have more than 3 dimensions, only 3-D `np.array` objects are needed here.  Similarly, nested `std::vector<T>` objects are only nested to depth `3` and the deepest `std::vector<T>` instances in a nested instance have the same dimension. As `cv::Mat` and `np.array` objects are contrained to have numeric elements, the C++ `std::vector<T>` and Python `[]` objects are limited to numeric elements in their innermost level. 
 
-The module is invoked in a Python script as
-```
-import mypackage
-```
+These limitation greatly simplify the example transfer operations between C++ and Python.  C++ is statically-typed and Python is dynamically-typed.  This constrains bindings between native complex data types in different languages.   Best performance, with the added benefit of simpler binding code, results when there are individual bindings for each C++ native complex data type used in an application.  Greatest flexibility results at the cost of more code complexity when the C++ code for a binding does dynamic type checking of Python objects and generates a C++ object matched to the particular Python object. These limitation also simplifies the example transfer operations between dynamically type Python and strictly static typed C++.
 
-These days [`setuptools`](https://setuptools.pypa.io/en/latest/userguide/index.html) is the preferred library to support Python packaging including C/C++ extensions.  `setuptools` is configured by a `pyproject.toml` file in a package.  But `setuptools` also can use a `setup.py` (or `setup.cfg`) file to configure modulle packaging.
+## Functional Description
+This example implements four approaches to matrix copying.  Each version begins with a Python `np.array` to C++/OpenCV `cv::Mat` transfer, is followed by a `cv::Mat` to `cv::Mat` copy, and concludes with a C++/OpenCV `cv::Mat` to a Python `np.array` transfer. The four versions demonstrate four different approaches for implementing the C++ copy operation.  One pair demonstrates C++ style copy operations and the other pair demonstrates a Pythonic-style copy operations.  One version in each pair uses `cv::Mat` source and destination objects.  The other version in each pair uses OpenCV `InputArray` and `OutputArray` proxy operations.
 
-## Building A C++ Extension
+This example also includes two versions of nested vector copying. Similar to the matrix operations, these copy operations begin by with a nested Python `[]` to C++ `std::vector<T>` *copy*, is followed by a `std::vector<T>` to `std::vector<T>` copy, and concludes with a C++ `std::vector<T>` to Python `[]` *copy*.  Because the vectors are native constructs in their respective languages with limited copy operations in C++, the somewhat challenging task here is using C++ templates to copy between variable depth Python `[]` and variable depth C++ `std::vector<T>` objects and, to a lesser degree,  copying between variable depth C++ `std::vector<T>` objects.
 
-### Install *robot-build* to automatically build Python wrappers for *pybind11* wrappers for the C++
+* [`setuptools`](https://setuptools.pypa.io/en/latest/userguide/index.html)
 
-* [Documentation](https://robotpy-build.readthedocs.io/en/latest/)
-* [Installation](https://robotpy-build.readthedocs.io/en/latest/install.html):
-```
-$ pip3 install robotpy-build
-```
-
-```
-struct buffer_info {
-    void *ptr;
-    py::ssize_t itemsize;   -- in bytes
-    std::string format;
-    py::ssize_t ndim;
-    std::vector<py::ssize_t> shape;
-    std::vector<py::ssize_t> strides;
-};
-
-int dtype = CV_MAKETYPE(CV_8U, info.shape[2]);
-```
-[NumPy Buffer Protocol](https://pybind11.readthedocs.io/en/stable/advanced/pycpp/numpy.html)
-
-
-## Notes:
-
-1. `np.array`s have unlimited dimensions. But `cv:Mat`s have only 3 dimensions where the third dimension is referred to as *channels*.  **WARNING**: This demo does not handle `np.array`s with more than 3 dimensions.
-2. `np.array`s and `cv:Mat`s use memory in a non-Pythonic, flexible C/C++ fashion and can be quite large.  Bindings such as `pybind11` and good programming practice strive to avoid copying the data in transfers between language domains.  Instead, transfers hand-off control of the memory and data it contains, including de-allocation when the data is no longer valid according to the rules of the language domain that has control of it when it becomes invalid.
-3.  Python `list` and C++ `std::vector<>` objects are native complex data types with their own memory organization in the respective languages.  For that reason, the binding for one language to the other can only efficiently transfer a read-only accessor in the destination language to the data in the source language. Otherwise, when read/write access is required, the binding must copy the data from the source language item into a destination object with the destination language format.
-4. C++ is statically-typed and Python is dynamically-typed.  This constrains bindings between native complex data types in different languages.   Best performance, with the added benefit of simpler binding code, results when there are individual bindings for each C++ native complex data type used in an application.  Greatest flexibility results at the cost of more code complexity when the C++ code for a binding does dynamic type checking of Python objects and generates a C++ object matched to the particular Python object.
+* [NumPy Buffer Protocol](https://pybind11.readthedocs.io/en/stable/advanced/pycpp/numpy.html)
