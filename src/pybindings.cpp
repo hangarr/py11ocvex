@@ -21,6 +21,7 @@
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
 
+using namespace std;
 namespace py = pybind11;
 
 

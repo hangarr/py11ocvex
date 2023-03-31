@@ -10,7 +10,8 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, "README.md"), "r") as fin:
     long_description = fin.read()
 
-from py11ocvex import __version__
+#from py11ocvex import __version__
+ver = "0.1.18"
 
 #
 # reads OpenCV path info from OS environment variables
@@ -65,13 +66,14 @@ ext_modules = [
 
 setup(
     name="py11ocvex",
-    version=__version__,
+    version=ver,
     description="Example pybind11 bindings for building opencv based apps",
     cmdclass={"build_ext": build_ext},
     ext_modules=ext_modules,
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
+    package_data={},
     install_requires=[
         "numpy>=1.21,<1.22",
         "pillow>=9.1,<9.2",
