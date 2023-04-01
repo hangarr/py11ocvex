@@ -13,9 +13,19 @@ The `cv::Mat` objects used for images in OpenCV are 3-D matrices.  This usefully
 These limitation greatly simplify the example transfer operations between C++ and Python.  C++ is statically-typed and Python is dynamically-typed.  This constrains bindings between native complex data types in different languages.   Best performance, with the added benefit of simpler binding code, results when there are individual bindings for each C++ native complex data type used in an application.  Greatest flexibility results at the cost of more code complexity when the C++ code for a binding does dynamic type checking of Python objects and generates a C++ object matched to the particular Python object. These limitation also simplifies the example transfer operations between dynamically type Python and strictly static typed C++.
 
 ## Functional Description
-This example implements four approaches to matrix copying.  Each version begins with a Python `np.array` to C++/OpenCV `cv::Mat` transfer, is followed by a `cv::Mat` to `cv::Mat` copy, and concludes with a C++/OpenCV `cv::Mat` to a Python `np.array` transfer. The four versions demonstrate four different approaches for implementing the C++ copy operation.  One pair demonstrates C++ style copy operations and the other pair demonstrates a Pythonic-style copy operations.  One version in each pair uses `cv::Mat` source and destination objects.  The other version in each pair uses OpenCV `InputArray` and `OutputArray` proxy operations.
+This example implements four approaches to matrix copying.  Each version begins with a Python `np.array` to C++/OpenCV `cv::Mat` transfer, is followed by a `cv::Mat` to `cv::Mat` copy, and concludes with a C++/OpenCV `cv::Mat` to a Python `np.array` transfer. The four versions demonstrate four different approaches for implementing the C++ copy operation.  One pair demonstrates C++ style copy operations and the other pair demonstrates a Pythonic-style copy operations.  One version in each pair uses `cv::Mat` source and destination objects.  The other version in each pair uses OpenCV `InputArray` and `OutputArray` proxy operations.  In Python:
+```
+    <dst> = px.testcopyCPP(<src>)   - C++ style copy with cv::Mat objects
+    <dst> = px.testcopyCPP2(<src>)  - C++ style copy with InputArray, OutputArray objects
+    <dst> = px.testcopyP(<src>)     - Python style copy with cv::Mat objects
+    <dst> = px.testcopyP2(<src>)    - Python style copy with InputArray and cv::Mat object
+```
 
 This example also includes two versions of nested vector copying. Similar to the matrix operations, these copy operations begin by with a nested Python `[]` to C++ `std::vector<T>` *copy*, is followed by a `std::vector<T>` to `std::vector<T>` copy, and concludes with a C++ `std::vector<T>` to Python `[]` *copy*.  Because the vectors are native constructs in their respective languages with limited copy operations in C++, the somewhat challenging task here is using C++ templates to copy between variable depth Python `[]` and variable depth C++ `std::vector<T>` objects and, to a lesser degree,  copying between variable depth C++ `std::vector<T>` objects.
+```
+    <dst> = px.testcopylvCPP(<src>)   - C++ style copy
+    <dst> = px.testcopylvP(<src>)     - Python style copy
+```
 
 ## Code Overview
 The example includes the following files:
@@ -47,6 +57,7 @@ The example includes the following files:
 
 
 ## References:
-* [`setuptools`](https://setuptools.pypa.io/en/latest/userguide/index.html)
-
-* [NumPy Buffer Protocol](https://pybind11.readthedocs.io/en/stable/advanced/pycpp/numpy.html)
+* Python data types - [https://docs.python.org/3/library/struct.html](https://docs.python.org/3/library/struct.html)
+* `pybind11` github site - [https://github.com/pybind/pybind11](https://github.com/pybind/pybind11)
+* `setuptools` - [https://setuptools.pypa.io/en/latest/userguide/index.html](https://setuptools.pypa.io/en/latest/userguide/index.html)
+* NumPy buffer protocol -  [https://pybind11.readthedocs.io/en/stable/advanced/pycpp/numpy.html](https://pybind11.readthedocs.io/en/stable/advanced/pycpp/numpy.html)
