@@ -51,7 +51,9 @@ The example includes the following files:
   pyproject.toml        - minimal project specification file
   setup.py              - "setuptools" version of this file for building the extension
 ```
-
+The `setup.py` routine requires pointers to an OpenCV instatllation in two environment variables:
+`OPENCV_INCLUDE_PATH` - OpenCV headers
+`OPENCV_LIBRARY_PATH` - OpenCV libraries
 
 ## Notes:
 
