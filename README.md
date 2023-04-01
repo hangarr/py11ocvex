@@ -17,6 +17,36 @@ This example implements four approaches to matrix copying.  Each version begins 
 
 This example also includes two versions of nested vector copying. Similar to the matrix operations, these copy operations begin by with a nested Python `[]` to C++ `std::vector<T>` *copy*, is followed by a `std::vector<T>` to `std::vector<T>` copy, and concludes with a C++ `std::vector<T>` to Python `[]` *copy*.  Because the vectors are native constructs in their respective languages with limited copy operations in C++, the somewhat challenging task here is using C++ templates to copy between variable depth Python `[]` and variable depth C++ `std::vector<T>` objects and, to a lesser degree,  copying between variable depth C++ `std::vector<T>` objects.
 
+## Code Overview
+The example includes the following files:
+```
+* bin
+      rebuild           - script to rebuild and install extension with "./bin/rebuild"
+      
+* docs
+    pybind11.pdf        - current version of "pybind11 Documentation" by Wenzel Jakob
+    
+* py11ocvex
+    init.py             - copy of what could be "__init__.py" file for Python module
+    demo1.py            - simple demo of this extension
+    
+* src
+    pybindings.cpp      - the pybind11 binding specification
+    testcopy.hpp        - example C++ application to copy/clone cv::Mat instances
+    testcopylv.hpp      - example C++ application to copy nested std:vector<T> instances
+    utils.hpp           - pure C++ utilities
+    utilsbindings.hpp   - OpenCV/pybind11 utilities to copy/clone cv::Mat instances
+    
+  README.md             - This file
+  pyproject.toml        - minimal project specification file
+  setup.py              - "setuptools" version of this file for building the extension
+```
+
+
+## Notes:
+
+
+## References:
 * [`setuptools`](https://setuptools.pypa.io/en/latest/userguide/index.html)
 
 * [NumPy Buffer Protocol](https://pybind11.readthedocs.io/en/stable/advanced/pycpp/numpy.html)
