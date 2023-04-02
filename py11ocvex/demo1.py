@@ -5,7 +5,7 @@ import sys
 
 
 import numpy as np
-import py11ocvex as px
+import py11ocvex_cpp as px
 
 def copy_and_compare_matrix(f, m):
     mc = f(m)

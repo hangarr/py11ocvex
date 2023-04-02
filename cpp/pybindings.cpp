@@ -264,11 +264,11 @@ py::list testcopylvPwrapper(py::list src) {
 }
 
 
-PYBIND11_MODULE(py11ocvex, m) {
+PYBIND11_MODULE(py11ocvex_cpp, m) {
     m.doc() = R"pbdoc(
         Pybind11 example plugin
         -----------------------
-        .. currentmodule:: py11ocvex
+        .. currentmodule:: py11ocvex_cpp
         .. autosummary::
            :toctree: _generate
     )pbdoc";

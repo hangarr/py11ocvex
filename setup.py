@@ -10,8 +10,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, "README.md"), "r") as fin:
     long_description = fin.read()
 
-#from py11ocvex import __version__
-__version__ = "0.0.1"
+from py11ocvex import __version__
 
 #
 # reads OpenCV path info from OS environment variables
@@ -37,8 +36,8 @@ except KeyError:
 """
 ext_modules = [
     Pybind11Extension(
-        "py11ocvex",
-        sorted(glob.glob("src/*.cpp")),  # Sort source files for reproducibility
+        "py11ocvex_cpp",
+        sorted(glob.glob("cpp/*.cpp")),  # Sort source files for reproducibility
         include_dirs=[opencv_include],
         library_dirs=[opencv_lib],
         libraries=[
@@ -53,8 +52,8 @@ ext_modules = [
 """
 ext_modules = [
     Pybind11Extension(
-        "py11ocvex",
-        sorted(glob.glob("src/*.cpp")),  # Sort source files for reproducibility
+        "py11ocvex_cpp",
+        sorted(glob.glob("cpp/*.cpp")),  # Sort source files for reproducibility
         include_dirs=[opencv_include],
         library_dirs=[opencv_lib],
         libraries=[

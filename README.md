@@ -40,7 +40,7 @@ The example includes the following files:
     init__.py           - what could be "__init__.py" file for a Python module
     demo1.py            - simple demo of this extension
     
-* src
+* cpp
     pybindings.cpp      - the pybind11 binding specification
     testcopy.hpp        - example C++ application to copy/clone cv::Mat instances
     testcopylv.hpp      - example C++ application to copy nested std:vector<T> instances
