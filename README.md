@@ -116,7 +116,7 @@ then:
 1. Python first attempts to load the `py11ocvex` Python subpackage, and
 2. Fails to load and properly initialize the C/C++ extension.
 
-The naming approach in this "flat-layout" example circumvents this problem.  Alternatively, and different file and folder layout may also avoid the problem and may be preferable for new projects.
+The naming approach in this "flat-layout" example circumvents this problem.  Alternatively, different file and folder layouts may also avoid the problem, and may be preferable for new projects.
 
 
 ## References:
