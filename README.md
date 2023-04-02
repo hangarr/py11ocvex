@@ -106,7 +106,7 @@ Specifically, it seems that if one:
 1. Names the C/C++ extension module export function `PyInit_py11ocvex`, rather than `PyInit_py11ocvex_cpp`, and
 2. Names the Python subpackage folder `py11ocvex`, and
 3. Starts the Python CLI from inside the outer `py11ocvex`, at the same level is the folder hierarchy as the inner `py11ocvex` file, and finally
-4. The `py11ocvex`` subfolder contains a `__init__.py` file;
+4. The `py11ocvex` subfolder contains a `__init__.py` file;
 with the statement:
 ```
 import py11ocvex as px
