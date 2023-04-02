@@ -112,7 +112,7 @@ add attempts to load the C/C++ extension with the statement:
 import py11ocvex as px
 ```
 then:
-1. Python attempts first attempts to load the `py11ocvex` Python subpackage, and
+1. Python first attempts to load the `py11ocvex` Python subpackage, and
 2. Fails to load and properly initialize the C/C++ extension.
 
 The naming approach in this "flat-layout" example circumvents this problem.  Alternatively, and different file and folder layout may also avoid the problem and may be preferable for new projects.
