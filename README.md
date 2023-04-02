@@ -31,13 +31,13 @@ This example also includes two versions of nested vector copying. Similar to the
 The example includes the following files:
 ```
 * bin
-      rebuild           - script to rebuild and install extension with "./bin/rebuild"
+    rebuild             - script to rebuild and install extension with "./bin/rebuild"
       
 * docs
     pybind11.pdf        - current version of "pybind11 Documentation" by Wenzel Jakob
     
-* py11ocvex
-    init.py             - copy of what could be "__init__.py" file for Python module
+* py11ocvex             - Simple python package within this example
+    init__.py           - what could be "__init__.py" file for a Python module
     demo1.py            - simple demo of this extension
     
 * src
@@ -55,8 +55,9 @@ The `setup.py` routine requires pointers to an OpenCV instatllation in two envir
 * `OPENCV_INCLUDE_PATH` - OpenCV headers
 * `OPENCV_LIBRARY_PATH` - OpenCV libraries
 
-## Notes:
-
+## Notes
+### Python packaging problem
+As of v. 0.0.1,  there is some unresolved problem with how the `pyc11ocvex` package in this example is structured and subsequently loaded.  The `init__.py` file should be `__init__.py` for this to be a proper Python package, such that the `.so` library that the Python `demo1.py` script can be loaded with the `.so` library that supplies the six commands above is `import`ed.  But when the package is `import`ed with `__init__.py` is supplied, the extension does not load correctly and the six demo functions don't exist.  Hopefully this will be resolved by the next version of this example.
 
 ## References:
 * Python data types - [https://docs.python.org/3/library/struct.html](https://docs.python.org/3/library/struct.html)
