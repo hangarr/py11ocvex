@@ -107,7 +107,8 @@ Specifically, it seems that if one:
 2. Names the Python subpackage folder `py11ocvex`, and
 3. Starts the Python CLI from inside the outer `py11ocvex`, at the same level is the folder hierarchy as the inner `py11ocvex` file, and finally
 4. The `py11ocvex` subfolder contains a `__init__.py` file;
-add attempts to load the C/C++ extension with the statement:
+
+and attempts to load the C/C++ extension with the statement:
 ```
 import py11ocvex as px
 ```
