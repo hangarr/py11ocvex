@@ -99,7 +99,7 @@ setup(
 )
 ```
 
-### Packaging problem
+### Packaging issue
 The multiple locations for specifying the names of the several components of this example as currently structured are not an issue in themselves.  But it appears one must keep in mind a detail of how the Python CLI works when choosing names.
 
 Specifically, it seems that if one:
